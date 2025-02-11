@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: web-scraper-api  # Choose a name for your service
+    name: web-scraper-api
     runtime: python
     envVars:
-      - key: GROQ_API_KEY   # Replace with your actual Groq API key
-        value: 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 # or use a secrets group
+      - key: GROQ_API_KEY
+        value: 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  # REPLACE WITH SECRETS GROUP!
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --bind :$PORT scraper:app
-    healthCheckPath: /  # Optional: Add a health check endpoint in your Flask app
+    startCommand: gunicorn --bind :$PORT main:app  # Corrected entry point
+    healthCheckPath: /
