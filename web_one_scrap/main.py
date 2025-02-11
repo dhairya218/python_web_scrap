@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException  # type: ignore
-from bs4 import BeautifulSoup # type: ignore
-import requests  # type: ignore
+from fastapi import FastAPI, HTTPException
+from bs4 import BeautifulSoup
+import requests
 import re
 from urllib.parse import urljoin, urlparse
 from typing import List
-from requests.adapters import HTTPAdapter  # type: ignore
-from requests.packages.urllib3.util.retry import Retry  # type: ignore
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 app = FastAPI()
 
@@ -83,8 +83,7 @@ def scrape_page(url: str) -> str:
 
 @app.get("/scrape")
 async def scrape_endpoint(url: str, command: str, query: str):
-    try:
-        text = scrape_page(url)
-        return {"text": text, "command": command, "query": query}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    text = scrape_page(url)  # Call scrape_page *without* try-except here
+    if "Error:" in text: # Check the return value for an error string.
+        raise HTTPException(status_code=500, detail=text)  # Raise the exception
+    return {"text": text, "command": command, "query": query}
